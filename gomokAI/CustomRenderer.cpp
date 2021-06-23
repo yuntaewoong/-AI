@@ -1,6 +1,13 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "CustomRenderer.h"
 #include "han2unicode.h"
+
+CustomRenderer::CustomRenderer()
+{
+
+}
+
+
 CustomRenderer::CustomRenderer(SDL_Renderer* renderer)
 {
 	this->renderer = renderer;

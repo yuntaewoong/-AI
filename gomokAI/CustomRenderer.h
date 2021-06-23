@@ -7,6 +7,7 @@ using namespace std;
 class CustomRenderer// 프로젝트에 사용되는 사각형그리기,선그리기,원그리기,텍스트 그리기기능을 캡슐화한다.
 {
 public:
+	CustomRenderer();
 	CustomRenderer(SDL_Renderer* renderer);
 	void DrawEmptyCircle(int32_t centreX, int32_t centreY, int32_t radius);
 	void DrawFilledCircle(int32_t centreX, int32_t centreY, int32_t radius);

@@ -2,23 +2,30 @@
 #include <SDL.h> 
 #include <SDL_ttf.h>
 #include <string>
-#include "CustomRenderer.h"
+#include "Game.h"
 
 using namespace std;
+/*
 SDL_Window* window; 
 SDL_Renderer* renderer;
 CustomRenderer* customRenderer;
+*/
 
 int main(int argc, char* argv[]) 
 { 
+	Game game;
+	game.Start();
+	/*
 	cout << "start\n";
 	// Initialize SDL 
+	
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) 
 	{ 
 		printf("Could not initialize SDL! (%s)\n", SDL_GetError());
 		return -1;
 	} 
 	TTF_Init();
+	
 	// Create window 
 	window = SDL_CreateWindow("GOMOK AI", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 700, 700, SDL_WINDOW_OPENGL); 
 	if (window == NULL) 
@@ -54,7 +61,6 @@ int main(int argc, char* argv[])
 	customRenderer->DrawText(message, 20, 20, 15, { 255,255,0,0 });
 	// Update screen 
 	customRenderer->Render();
-	
 	SDL_Event event; 
 	int done = 0; 
 	while (!done) 
@@ -64,6 +70,9 @@ int main(int argc, char* argv[])
 		{ 
 			done = 1; 
 		} 
+		if (event.type == SDL_KEYDOWN)
+		{
+		}
 	} 
 	
 	SDL_DestroyRenderer(renderer); 
@@ -71,5 +80,6 @@ int main(int argc, char* argv[])
 	SDL_Quit();
 	TTF_Quit();
 	printf("End\n"); 
+	*/
 	return 0; 
 }
