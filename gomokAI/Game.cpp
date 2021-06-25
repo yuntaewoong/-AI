@@ -19,8 +19,7 @@ void Game::Start()
         std::cout << "ERROR: Failed to initialise SDL_ttf!" << std::endl;
         Stop();
     }
-
-    m_Window = SDL_CreateWindow("RPG", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+    m_Window = SDL_CreateWindow("Gomoku", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     if (!m_Window)
     {
         std::cout << "ERROR: Failed to create SDL_Window!" << std::endl;
@@ -39,6 +38,7 @@ void Game::Start()
     customRenderer = CustomRenderer(m_Renderer);
     SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 
+    this->updateObjects.push_back(new GomokuBoard(&customRenderer,WINDOW_WIDTH,WINDOW_HEIGHT,WHITE_SPACE));
     GameLoop();
 }
 
@@ -64,7 +64,6 @@ void Game::GameLoop()
         Update(m_DeltaTime);//게임 업데이트루프
         m_DeltaTime = static_cast<float>(deltaTimer.GetTicks()) / 1000.0f;
         deltaTimer.Start();
-        Render();
     }
     Stop();
 }
@@ -81,13 +80,8 @@ void Game::HandleEvents()
 }
 void Game::Update(float deltaTime)
 {
-}
-
-void Game::Render()
-{
-    customRenderer.DrawColorChange({ 255,255,255 });
-    customRenderer.ClearRenderer();
-    customRenderer.DrawColorChange({ 255,255,0 });
-    customRenderer.DrawFilledCircle(100, 100, 100);
-    customRenderer.Render();
+    this->customRenderer.ClearRenderer();
+    for (int i = 0; i < this->updateObjects.size(); i++)
+        this->updateObjects[i]->Update();//업데이트 함수들 실행
+    this->customRenderer.Render();
 }

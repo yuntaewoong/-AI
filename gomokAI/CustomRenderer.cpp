@@ -97,6 +97,7 @@ void CustomRenderer::DrawFilledCircle(int32_t centreX, int32_t centreY, int32_t 
 }
 void CustomRenderer::ClearRenderer()
 {
+	this->DrawColorChange({ 255,255,255,0 });
 	SDL_RenderClear(renderer);
 }
 void CustomRenderer::DrawRect(int x1, int y1, int x2, int y2)

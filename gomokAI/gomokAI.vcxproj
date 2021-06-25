@@ -145,14 +145,19 @@
   <ItemGroup>
     <ClCompile Include="CustomRenderer.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GomokuBoard.cpp" />
+    <ClCompile Include="GomokuBoardState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CustomRenderer.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GomokuBoardState.h" />
+    <ClInclude Include="GomokuBoard.h" />
     <ClInclude Include="han2unicode.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="IUpdateObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
