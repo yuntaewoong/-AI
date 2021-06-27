@@ -12,8 +12,6 @@ void Game::Start()
         std::cout << "ERROR: Failed to initialise SDL!" << std::endl;
         Stop();
     }
-
-
     if (TTF_Init() == -1)
     {
         std::cout << "ERROR: Failed to initialise SDL_ttf!" << std::endl;
@@ -38,7 +36,7 @@ void Game::Start()
     customRenderer = CustomRenderer(m_Renderer);
     SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 
-    this->updateObjects.push_back(new GomokuBoard(&customRenderer,WINDOW_WIDTH,WINDOW_HEIGHT,WHITE_SPACE));
+    this->updateObjects.push_back(new GomokuBoard(&customRenderer,(float)WINDOW_WIDTH,(float)WINDOW_HEIGHT,(float)WHITE_SPACE));
     GameLoop();
 }
 

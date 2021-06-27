@@ -12,8 +12,8 @@ public:
 	void DrawEmptyCircle(int32_t centreX, int32_t centreY, int32_t radius);
 	void DrawFilledCircle(int32_t centreX, int32_t centreY, int32_t radius);
 	void ClearRenderer();
-	void DrawRect(int x1,int y1, int x2, int y2);
-	void DrawLine(int x1, int y1, int x2, int y2);
+	void DrawRect(float x1,float y1, float width, float height);
+	void DrawLine(float x1, float y1, float x2, float y2);
 	void DrawText(string text, int x, int y, int fontSize,SDL_Color color);
 	void DrawColorChange(SDL_Color color);
 	void Render();

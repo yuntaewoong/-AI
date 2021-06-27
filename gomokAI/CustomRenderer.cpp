@@ -100,16 +100,16 @@ void CustomRenderer::ClearRenderer()
 	this->DrawColorChange({ 255,255,255,0 });
 	SDL_RenderClear(renderer);
 }
-void CustomRenderer::DrawRect(int x1, int y1, int x2, int y2)
+void CustomRenderer::DrawRect(float x1, float y1, float width, float height)
 {
-	SDL_Rect r = { x1, y1, x2, y2 };
-	SDL_RenderDrawRect(renderer, &r);
+	SDL_FRect r = { x1, y1, width, height };
+	SDL_RenderDrawRectF(renderer, &r);
 }
 
 
-void CustomRenderer::DrawLine(int x1, int y1, int x2, int y2)
+void CustomRenderer::DrawLine(float x1, float y1, float x2, float y2)
 {
-	SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+	SDL_RenderDrawLineF(renderer, x1, y1, x2, y2);
 }
 void CustomRenderer::DrawText(string text, int x, int y, int fontSize,SDL_Color textColor)
 {

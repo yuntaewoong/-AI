@@ -1,7 +1,6 @@
 #include "Timer.h"
 
 #include <SDL.h>
-
 void Timer::Start()
 {
     m_Started = true;
@@ -10,7 +9,6 @@ void Timer::Start()
     m_StartTime = SDL_GetTicks();
     m_PausedTime = 0;
 }
-
 void Timer::Stop()
 {
     m_Started = false;
@@ -19,7 +17,6 @@ void Timer::Stop()
     m_StartTime = 0;
     m_PausedTime = 0;
 }
-
 void Timer::Pause()
 {
     if (m_Started && !m_Paused)
@@ -30,7 +27,6 @@ void Timer::Pause()
         m_StartTime = 0;
     }
 }
-
 void Timer::Unpause()
 {
     if (m_Started && m_Paused)
@@ -41,7 +37,6 @@ void Timer::Unpause()
         m_PausedTime = 0;
     }
 }
-
 int Timer::GetTicks()
 {
     if (m_Started)
