@@ -13,6 +13,7 @@ public:
 	GomokuBoardValue GetBoardValue();
 	bool GetBlackBanned();
 	void SetBoardValue(GomokuBoardValue boardValue);
+	void SetBlackBanned(bool blackBanned);
 private:
 	GomokuBoardValue boardValue;
 	bool blackBanned = false;

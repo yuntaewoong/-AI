@@ -12,6 +12,7 @@ private:
     SDL_Window* m_Window;
     SDL_Renderer* m_Renderer;
     CustomRenderer customRenderer;
+    GomokuBoard* gomokuBoard;
     vector<IUpdateObject*> updateObjects;//업데이트함수 실행대상 오브젝트들
     bool m_Running;
     float m_DeltaTime;

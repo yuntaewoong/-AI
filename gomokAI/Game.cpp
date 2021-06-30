@@ -3,6 +3,7 @@
 #include <SDL_ttf.h>
 #include "Timer.h"
 #include <string>
+
 void Game::Start()
 {
     m_Running = true;
@@ -35,8 +36,8 @@ void Game::Start()
     }
     customRenderer = CustomRenderer(m_Renderer);
     SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
-
-    this->updateObjects.push_back(new GomokuBoard(&customRenderer,(float)WINDOW_WIDTH,(float)WINDOW_HEIGHT,(float)WHITE_SPACE));
+    gomokuBoard = new GomokuBoard(&customRenderer, WINDOW_WIDTH, WINDOW_HEIGHT, WHITE_SPACE);
+    this->updateObjects.push_back(gomokuBoard);
     GameLoop();
 }
 
@@ -46,7 +47,7 @@ void Game::Stop()
     SDL_DestroyRenderer(m_Renderer);
     m_Window = nullptr;
     m_Renderer = nullptr;
-
+    delete gomokuBoard;
     SDL_Quit();
 
     m_Running = false;
@@ -73,6 +74,17 @@ void Game::HandleEvents()
     {
     case SDL_QUIT:
         m_Running = false;
+        break;
+    case SDL_MOUSEMOTION:
+        gomokuBoard->SetMousePosition(event.motion.x, event.motion.y);
+        break;
+    case SDL_MOUSEBUTTONDOWN:
+        switch (event.button.button)
+        {    
+        case SDL_BUTTON_LEFT:
+            gomokuBoard->PutStoneByMouse();
+            break;
+        }
         break;
     }
 }

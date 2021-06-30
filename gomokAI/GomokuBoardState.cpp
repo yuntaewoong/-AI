@@ -19,3 +19,7 @@ void GomokuBoardState::SetBoardValue(GomokuBoardValue boardValue)
 {
 	this->boardValue = boardValue;
 }
+void GomokuBoardState::SetBlackBanned(bool blackBanned)
+{
+	this->blackBanned = blackBanned;
+}
