@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="RenjuRuleManager.cpp" />
     <ClCompile Include="CustomRenderer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GomokuBoard.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="RenjuRuleManager.h" />
     <ClInclude Include="CustomRenderer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GomokuBoardState.h" />

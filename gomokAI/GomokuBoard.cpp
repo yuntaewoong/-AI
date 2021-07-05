@@ -6,6 +6,7 @@ GomokuBoard::GomokuBoard(CustomRenderer* renderer, int boardWidth, int boardHeig
 	for (int i = 0; i < BOARD_SIZE; i++)
 		this->board[i] = new GomokuBoardState[BOARD_SIZE];
 	this->renderer = renderer;
+	this->renjuRuleManager = new RenjuRuleManager(this->board, BOARD_SIZE);
 	this->boardWidth = boardWidth;
 	this->boardHeight = boardHeight;
 	this->boardWhiteSpace = boardWhiteSpace;
@@ -35,15 +36,15 @@ void GomokuBoard::PutStone(int x, int y)
 		board[y][x].SetBoardValue(GomokuBoardValue::BLACK);
 	else
 		board[y][x].SetBoardValue(GomokuBoardValue::WHITE);
-
+	BlackBannedUpdate();//흑금수 갱신
 	ChangeTurn();//착수후 턴교체
 }
 void GomokuBoard::PutStoneByMouse()//gomokuBoard객체에 저장된 마우스 정보로 착수
 {
 	int rectWidth = boardWidth - 2 * boardWhiteSpace;
 	int rectHeight = boardHeight - 2 * boardWhiteSpace;
-	int gridWidth = rectWidth / (BOARD_SIZE - 1);
-	int gridHeight = rectHeight / (BOARD_SIZE - 1);
+	float gridWidth = rectWidth / (BOARD_SIZE - 1);
+	float gridHeight = rectHeight / (BOARD_SIZE - 1);
 	if (mouseX < boardWhiteSpace - gridWidth || mouseX >= boardWhiteSpace + rectWidth + gridWidth)
 		return;//x범위 초과시 리턴
 	if (mouseY < boardWhiteSpace - gridHeight || mouseY >= boardWhiteSpace + rectHeight + gridHeight)
@@ -72,14 +73,21 @@ GomokuBoard::~GomokuBoard()
 		delete[] this->board[i];
 	delete[] this->board;
 }
+void GomokuBoard::BlackBannedUpdate()
+{
+	for (int i = 0; i < BOARD_SIZE; i++)
+		for (int j = 0; j < BOARD_SIZE; j++)
+			this->board[i][j].SetBlackBanned(renjuRuleManager->IsBlackBanned(j, i));
+}
 void GomokuBoard::DrawGrid()
 {
-	this->renderer->DrawColorChange(GRID_COLOR);
 	int rectWidth = boardWidth - 2 * boardWhiteSpace;
 	int rectHeight = boardHeight - 2 * boardWhiteSpace;
-	this->renderer->DrawRect(boardWhiteSpace, boardWhiteSpace,rectWidth,rectHeight);
-	int gridWidth = rectWidth / (BOARD_SIZE-1);
-	int gridHeight = rectHeight / (BOARD_SIZE - 1);
+	this->renderer->DrawColorChange(GOMOKUBOARD_COLOR);
+	this->renderer->DrawFilledRect(boardWhiteSpace, boardWhiteSpace,rectWidth,rectHeight);
+	float gridWidth = (float)rectWidth / (BOARD_SIZE-1);
+	float gridHeight = (float)rectHeight / (BOARD_SIZE - 1);
+	this->renderer->DrawColorChange(GRID_COLOR);
 	for (int i = 0; i < BOARD_SIZE-1; i++)
 	{
 		this->renderer->DrawLine(boardWhiteSpace + i * gridWidth,
@@ -97,8 +105,8 @@ void GomokuBoard::DrawStone()
 {
 	int rectWidth = boardWidth - 2 * boardWhiteSpace;
 	int rectHeight = boardHeight - 2 * boardWhiteSpace;
-	int gridWidth = rectWidth / (BOARD_SIZE - 1);
-	int gridHeight = rectHeight / (BOARD_SIZE - 1);
+	float gridWidth = (float)rectWidth / (BOARD_SIZE - 1);
+	float gridHeight = (float)rectHeight / (BOARD_SIZE - 1);
 	for (int i = 0; i < BOARD_SIZE; i++)
 	{
 		for (int j = 0; j < BOARD_SIZE; j++)
@@ -130,8 +138,8 @@ void GomokuBoard::DrawBlackBanned()
 		return;
 	int rectWidth = boardWidth - 2 * boardWhiteSpace;
 	int rectHeight = boardHeight - 2 * boardWhiteSpace;
-	int gridWidth = rectWidth / (BOARD_SIZE - 1);
-	int gridHeight = rectHeight / (BOARD_SIZE - 1);
+	float gridWidth = (float)rectWidth / (BOARD_SIZE - 1);
+	float gridHeight = (float)rectHeight / (BOARD_SIZE - 1);
 	renderer->DrawColorChange(BLACKBANNED_COLOR);
 	for (int i = 0; i < BOARD_SIZE; i++)
 	{
@@ -155,8 +163,8 @@ void GomokuBoard::DrawMouseOnRect()
 {
 	int rectWidth = boardWidth - 2 * boardWhiteSpace;
 	int rectHeight = boardHeight - 2 * boardWhiteSpace;
-	int gridWidth = rectWidth / (BOARD_SIZE - 1);
-	int gridHeight = rectHeight / (BOARD_SIZE - 1);
+	float gridWidth = (float)rectWidth / (BOARD_SIZE - 1);
+	float gridHeight = (float)rectHeight / (BOARD_SIZE - 1);
 	if (mouseX < boardWhiteSpace - gridWidth || mouseX >= boardWhiteSpace + rectWidth + gridWidth)
 		return;//x범위 초과시 출력X
 	if (mouseY < boardWhiteSpace - gridHeight || mouseY >= boardWhiteSpace + rectHeight + gridHeight)
@@ -184,14 +192,14 @@ void GomokuBoard::DrawMouseOnRect()
 int GomokuBoard::Mouse2BoardPositionX(int mouseX)
 {
 	int rectWidth = boardWidth - 2 * boardWhiteSpace;
-	int gridWidth = rectWidth / (BOARD_SIZE - 1);
-	int result = int((mouseX - boardWhiteSpace) / (float)gridWidth + 0.5);
+	float gridWidth = (float)rectWidth / (BOARD_SIZE - 1);
+	int result = int((mouseX - boardWhiteSpace) / gridWidth + 0.5);
 	return result <= 0 ? 0 : (result >= BOARD_SIZE ? BOARD_SIZE-1:result);
 }
 int GomokuBoard::Mouse2BoardPositionY(int mouseY)
 {
 	int rectHeight = boardHeight - 2 * boardWhiteSpace;
-	int gridHeight = rectHeight / (BOARD_SIZE - 1);
-	int result = int((mouseY - boardWhiteSpace) / (float)gridHeight + 0.5);
+	float gridHeight = (float)rectHeight / (BOARD_SIZE - 1);
+	int result = int((mouseY - boardWhiteSpace) / gridHeight + 0.5);
 	return result <= 0 ? 0 : (result >= BOARD_SIZE ? BOARD_SIZE - 1 : result);
 }

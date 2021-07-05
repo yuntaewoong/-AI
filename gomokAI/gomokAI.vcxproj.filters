@@ -33,6 +33,9 @@
     <ClCompile Include="GomokuBoardState.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="RenjuRuleManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="han2unicode.h">
@@ -54,6 +57,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="IUpdateObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RenjuRuleManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

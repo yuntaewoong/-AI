@@ -5,6 +5,11 @@ enum class GomokuBoardValue
 	WHITE,
 	BLACK
 };
+enum class Turn
+{
+	BLACK_TURN,
+	WHITE_TURN
+};
 class GomokuBoardState
 {
 public:
