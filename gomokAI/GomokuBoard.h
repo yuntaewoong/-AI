@@ -8,7 +8,7 @@
 class GomokuBoard : public IUpdateObject
 {
 private:
-	const int BOARD_SIZE = 15;
+	
 	const float BLACKBANNED_SIZE = 0.25;
 	const float MOUSEON_SIZE = 0.5;
 	const SDL_Color GRID_COLOR = { 0,0,0,0 };
@@ -28,13 +28,19 @@ private:
 	Turn turn = Turn::BLACK_TURN;
 public:
 	GomokuBoard(CustomRenderer* renderer,int boardWidth,int boardHeight, int boardWhiteSpace);
+	GomokuBoard(GomokuBoard& board);
+	static const int BOARD_SIZE = 15;
 	virtual void Update();
 	void ChangeTurn();
-	void PutStone(int x,int y);
-	void PutStoneByMouse();
+	bool PutStone(int x,int y);
+	bool PutStoneByMouse();
 	void SetMousePosition(int x, int y);
+	bool IsEmpty(int x,int y);
+	bool IsBlackBanned(int x, int y);
 	int GetMouseX();
 	int GetMouseY();
+	Turn GetTurn();
+	int GetBoardValue(int x,int y);//현재 오목판의 (x,y)에 돌을 놓을때의 가치를 수치화해서 리턴
 	~GomokuBoard();
 private:
 	void BlackBannedUpdate();//오목 보드의 흑금수 갱신

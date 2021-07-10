@@ -988,7 +988,6 @@ bool RenjuRuleManager::IsDoubleThree(int x, int y,Turn turn)
 	{
 		if (IsOpenThree(x, y, turn, i))
 		{
-			std::cout << x<< " " << y << " " << "Open Three!\n";
 			nThree++;
 		}
 	}

@@ -1,5 +1,4 @@
 #include "GomokuBoard.h"
-#include <iostream>
 GomokuBoard::GomokuBoard(CustomRenderer* renderer, int boardWidth, int boardHeight, int boardWhiteSpace)
 {
 	this->board = new GomokuBoardState*[BOARD_SIZE];
@@ -10,6 +9,19 @@ GomokuBoard::GomokuBoard(CustomRenderer* renderer, int boardWidth, int boardHeig
 	this->boardWidth = boardWidth;
 	this->boardHeight = boardHeight;
 	this->boardWhiteSpace = boardWhiteSpace;
+}
+GomokuBoard::GomokuBoard(GomokuBoard& board)
+{
+	this->board = new GomokuBoardState * [BOARD_SIZE];
+	for (int i = 0; i < BOARD_SIZE; i++)
+		this->board[i] = new GomokuBoardState[BOARD_SIZE];
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		for (int j = 0; j < BOARD_SIZE; j++)
+		{
+			this->board[i][j] = board.board[i][j];
+		}
+	}
 }
 void GomokuBoard::Update()
 {
@@ -25,12 +37,12 @@ void GomokuBoard::ChangeTurn()
 	else
 		turn = Turn::BLACK_TURN;
 }
-void GomokuBoard::PutStone(int x, int y)
+bool GomokuBoard::PutStone(int x, int y)
 {
-	if (turn == Turn::BLACK_TURN && board[x][y].GetBlackBanned())
-		return;//검정턴에 검정돌을 놓으려는데 그곳이 흑금수일경우 착수금지
+	if (turn == Turn::BLACK_TURN && board[y][x].GetBlackBanned())
+		return false;//검정턴에 검정돌을 놓으려는데 그곳이 흑금수일경우 착수금지
 	if (board[y][x].GetBoardValue() != GomokuBoardValue::EMPTY)
-		return;//이미 채워진칸에 착수금지
+		return false;//이미 채워진칸에 착수금지
 	
 	if (turn == Turn::BLACK_TURN)
 		board[y][x].SetBoardValue(GomokuBoardValue::BLACK);
@@ -38,26 +50,36 @@ void GomokuBoard::PutStone(int x, int y)
 		board[y][x].SetBoardValue(GomokuBoardValue::WHITE);
 	BlackBannedUpdate();//흑금수 갱신
 	ChangeTurn();//착수후 턴교체
+	return true;
 }
-void GomokuBoard::PutStoneByMouse()//gomokuBoard객체에 저장된 마우스 정보로 착수
+bool GomokuBoard::PutStoneByMouse()//gomokuBoard객체에 저장된 마우스 정보로 착수
 {
 	int rectWidth = boardWidth - 2 * boardWhiteSpace;
 	int rectHeight = boardHeight - 2 * boardWhiteSpace;
 	float gridWidth = rectWidth / (BOARD_SIZE - 1);
 	float gridHeight = rectHeight / (BOARD_SIZE - 1);
 	if (mouseX < boardWhiteSpace - gridWidth || mouseX >= boardWhiteSpace + rectWidth + gridWidth)
-		return;//x범위 초과시 리턴
+		return false;//x범위 초과시 리턴
 	if (mouseY < boardWhiteSpace - gridHeight || mouseY >= boardWhiteSpace + rectHeight + gridHeight)
-		return;//y범위 초과시 리턴
+		return false;//y범위 초과시 리턴
 	int boardX = Mouse2BoardPositionX(mouseX);
 	int boardY = Mouse2BoardPositionY(mouseY);
 
 	this->PutStone(boardX, boardY);
+	return true;
 }
 void GomokuBoard::SetMousePosition(int x, int y)
 {
 	mouseX = x;
 	mouseY = y;
+}
+bool GomokuBoard::IsEmpty(int x, int y)
+{
+	return this->board[y][x].GetBoardValue() == GomokuBoardValue::EMPTY;
+}
+bool GomokuBoard::IsBlackBanned(int x, int y)
+{
+	return this->board[y][x].GetBlackBanned();
 }
 int GomokuBoard::GetMouseX()
 {
@@ -66,6 +88,28 @@ int GomokuBoard::GetMouseX()
 int GomokuBoard::GetMouseY()
 {
 	return mouseY;
+}
+Turn GomokuBoard::GetTurn()
+{
+	return turn;
+}
+int GomokuBoard::GetBoardValue(int x,int y)
+{
+	int value = 0;
+	if (renjuRuleManager->IsFive(x, y, turn) || renjuRuleManager->IsOverline(x, y, turn))
+		return 10000;
+	if (renjuRuleManager->IsDoubleFour(x, y, turn) || renjuRuleManager->IsDoubleThree(x, y, turn))
+		return 5000;
+	if (renjuRuleManager->IsOpenFour(x, y, turn,1) || renjuRuleManager->IsOpenFour(x, y, turn, 2) 
+		|| renjuRuleManager->IsOpenFour(x, y, turn, 3) || renjuRuleManager->IsOpenFour(x, y, turn, 4))
+		return 5000;
+	if (renjuRuleManager->IsFour(x,y,turn,1) || renjuRuleManager->IsFour(x, y, turn, 2)
+		|| renjuRuleManager->IsFour(x, y, turn, 3) || renjuRuleManager->IsFour(x, y, turn, 4))
+		value += 1000;
+	if (renjuRuleManager->IsOpenThree(x, y, turn, 1) || renjuRuleManager->IsOpenThree(x, y, turn, 2)
+		|| renjuRuleManager->IsOpenThree(x, y, turn, 3) || renjuRuleManager->IsOpenThree(x, y, turn, 4))
+		value += 1000;
+	return value;
 }
 GomokuBoard::~GomokuBoard()
 {
