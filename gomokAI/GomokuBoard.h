@@ -21,7 +21,7 @@ private:
 	int boardWhiteSpace;
 	int mouseX=0;
 	int mouseY=0;
-
+	bool isEnd = false;
 	GomokuBoardState** board;
 	CustomRenderer* renderer;
 	RenjuRuleManager* renjuRuleManager;
@@ -41,6 +41,7 @@ public:
 	int GetMouseY();
 	Turn GetTurn();
 	int GetBoardValue(int x,int y);//현재 오목판의 (x,y)에 돌을 놓을때의 가치를 수치화해서 리턴
+	bool IsEnd();
 	~GomokuBoard();
 private:
 	void BlackBannedUpdate();//오목 보드의 흑금수 갱신

@@ -34,10 +34,9 @@ void Game::Start()
         std::cout << "ERROR: Failed to create SDL_Renderer!" << std::endl;
         Stop();
     }
-    customRenderer = CustomRenderer(m_Renderer);
+    this->customRenderer = new CustomRenderer(m_Renderer);
     SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
-    gomokuBoard = new GomokuBoard(&customRenderer, WINDOW_WIDTH, WINDOW_HEIGHT, WHITE_SPACE);
-    this->updateObjects.push_back(gomokuBoard);
+    currentScene = new InitScene(customRenderer);
     GameLoop();
 }
 
@@ -68,30 +67,32 @@ void Game::GameLoop()
 }
 void Game::HandleEvents()
 {
+    ChangeScene();
     SDL_Event event;
     SDL_PollEvent(&event);
+    currentScene->EventHandling(event);
+   
+
     switch (event.type)
     {
     case SDL_QUIT:
         m_Running = false;
         break;
-    case SDL_MOUSEMOTION:
-        gomokuBoard->SetMousePosition(event.motion.x, event.motion.y);
-        break;
-    case SDL_MOUSEBUTTONDOWN:
-        switch (event.button.button)
-        {    
-        case SDL_BUTTON_LEFT:
-            gomokuBoard->PutStoneByMouse();
-            break;
-        }
-        break;
     }
 }
 void Game::Update(float deltaTime)
 {
-    this->customRenderer.ClearRenderer();
-    for (int i = 0; i < this->updateObjects.size(); i++)
-        this->updateObjects[i]->Update();//업데이트 함수들 실행
-    this->customRenderer.Render();
+    this->customRenderer->ClearRenderer();
+    currentScene->Update();
+    currentScene->UpdateScene();
+    this->customRenderer->Render();
+}
+void Game::ChangeScene()
+{
+    if (currentScene->GetNextSceneReady())
+    {
+        Scene* temp = currentScene->NextScene();
+        delete this->currentScene;
+        currentScene = temp;
+    }
 }

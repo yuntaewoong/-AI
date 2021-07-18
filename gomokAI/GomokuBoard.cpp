@@ -22,6 +22,7 @@ GomokuBoard::GomokuBoard(GomokuBoard& board)
 			this->board[i][j] = board.board[i][j];
 		}
 	}
+	this->renjuRuleManager = new RenjuRuleManager(this->board, BOARD_SIZE);
 }
 void GomokuBoard::Update()
 {
@@ -43,7 +44,8 @@ bool GomokuBoard::PutStone(int x, int y)
 		return false;//검정턴에 검정돌을 놓으려는데 그곳이 흑금수일경우 착수금지
 	if (board[y][x].GetBoardValue() != GomokuBoardValue::EMPTY)
 		return false;//이미 채워진칸에 착수금지
-	
+	if (renjuRuleManager->IsFive(x, y, turn))//종료조건만족
+		isEnd = true;
 	if (turn == Turn::BLACK_TURN)
 		board[y][x].SetBoardValue(GomokuBoardValue::BLACK);
 	else
@@ -64,7 +66,7 @@ bool GomokuBoard::PutStoneByMouse()//gomokuBoard객체에 저장된 마우스 정보로 착수
 		return false;//y범위 초과시 리턴
 	int boardX = Mouse2BoardPositionX(mouseX);
 	int boardY = Mouse2BoardPositionY(mouseY);
-
+	
 	this->PutStone(boardX, boardY);
 	return true;
 }
@@ -110,6 +112,10 @@ int GomokuBoard::GetBoardValue(int x,int y)
 		|| renjuRuleManager->IsOpenThree(x, y, turn, 3) || renjuRuleManager->IsOpenThree(x, y, turn, 4))
 		value += 1000;
 	return value;
+}
+bool GomokuBoard::IsEnd()
+{
+	return this->isEnd;
 }
 GomokuBoard::~GomokuBoard()
 {

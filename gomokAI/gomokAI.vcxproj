@@ -143,23 +143,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIGameScene.cpp" />
+    <ClCompile Include="EndScene.cpp" />
     <ClCompile Include="GomokuAINode.cpp" />
+    <ClCompile Include="InitScene.cpp" />
+    <ClCompile Include="PVPGameScene.cpp" />
     <ClCompile Include="RenjuRuleManager.cpp" />
     <ClCompile Include="CustomRenderer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GomokuBoard.cpp" />
     <ClCompile Include="GomokuBoardState.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GomkuAINode.h" />
+    <ClInclude Include="AIGameScene.h" />
+    <ClInclude Include="ConstValue.h" />
+    <ClInclude Include="EndScene.h" />
+    <ClInclude Include="GomokuAINode.h" />
+    <ClInclude Include="InitScene.h" />
+    <ClInclude Include="PVPGameScene.h" />
     <ClInclude Include="RenjuRuleManager.h" />
     <ClInclude Include="CustomRenderer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GomokuBoardState.h" />
     <ClInclude Include="GomokuBoard.h" />
     <ClInclude Include="han2unicode.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="IUpdateObject.h" />
   </ItemGroup>

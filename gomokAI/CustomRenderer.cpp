@@ -2,11 +2,6 @@
 #include "CustomRenderer.h"
 #include "han2unicode.h"
 
-CustomRenderer::CustomRenderer()
-{
-
-}
-
 
 CustomRenderer::CustomRenderer(SDL_Renderer* renderer)
 {
@@ -127,7 +122,7 @@ void CustomRenderer::DrawText(string text, int x, int y, int fontSize,SDL_Color 
 	int text_width = textSurface->w;
 	int text_height = textSurface->h;
 	SDL_FreeSurface(textSurface);
-	SDL_Rect renderQuad = { 20, 20, text_width, text_height };
+	SDL_Rect renderQuad = { x, y, text_width, text_height };
 	SDL_RenderCopy(renderer, texture, NULL, &renderQuad);
 	SDL_DestroyTexture(texture);
 }

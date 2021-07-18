@@ -1,6 +1,6 @@
-#include "GomkuAINode.h"
+#include "GomokuAINode.h"
 
-GomokuAINode::GomokuAINode(GomokuBoard& board, int value = 0)
+GomokuAINode::GomokuAINode(GomokuBoard& board, int value)
 {
 	this->board = new GomokuBoard(board);//µöÄ«ÇÇ
 	this->value = value;
@@ -11,7 +11,7 @@ GomokuAINode::~GomokuAINode()
 }
 void GomokuAINode::MakeTree(int depth)
 {
-	if (depth == 0)
+	if (depth == 0)//base case
 	{
 		for (int i = 0; i < GomokuBoard::BOARD_SIZE; i++)
 			for (int j = 0; j < GomokuBoard::BOARD_SIZE; j++)
@@ -36,7 +36,7 @@ GomokuBoard* GomokuAINode::GetMiniMaxResult()
 			return nextNodes[i]->board;
 	}
 }
-bool GomokuAINode::NewNode(int x, int y,int value = 0)
+bool GomokuAINode::NewNode(int x, int y,int value)
 {
 	GomokuBoard* newBoard = new GomokuBoard(*board);
 	if (newBoard->PutStone(x, y))
@@ -71,7 +71,7 @@ void GomokuAINode::SetMaxValue()
 	int temp = 0;
 	for (int i = 0; i < nextNodes.size(); i++)
 	{
-		nextNodes[i]->SetMaxValue();
+		nextNodes[i]->SetMiniValue();
 		if (nextNodes[i]->value >= temp)
 			temp = nextNodes[i]->value;
 	}

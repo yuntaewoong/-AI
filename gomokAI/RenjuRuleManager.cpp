@@ -11,7 +11,9 @@ bool RenjuRuleManager::IsBlackBanned(int x, int y)
 		return false;
 	else
 	{
-		if (IsOverline(x, y, Turn::BLACK_TURN) || IsDoubleFour(x, y, Turn::BLACK_TURN) ||  IsDoubleThree(x, y, Turn::BLACK_TURN))
+		if (IsFive(x, y, Turn::BLACK_TURN))//오목을 만들수있다면 금수 관계없이 무조건 놓을수있다.
+			return false;
+		if (IsOverline(x, y, Turn::BLACK_TURN) || IsDoubleFour(x, y, Turn::BLACK_TURN) || IsDoubleThree(x, y, Turn::BLACK_TURN))
 			return true;
 	}
 }
@@ -54,14 +56,11 @@ bool RenjuRuleManager::IsOverline(int x, int y,Turn turn)
 		else
 			break;
 	}
-	if (nLine == 5)
+	if (nLine >= 6)
 	{
 		SetStone(x, y, GomokuBoardValue::EMPTY);
-		return false;
+		return true;
 	}
-	else
-		bOverline = (nLine >= 6);
-
 	// 2 - vertical direction
 	nLine = 1;
 	i = y - 1;
@@ -80,15 +79,13 @@ bool RenjuRuleManager::IsOverline(int x, int y,Turn turn)
 		else
 			break;
 	}
-	if (nLine == 5)
+	if (nLine >= 6)
 	{
-		SetStone(x, y, Turn2GomokuBoardValue(turn));
-		return false;
+		SetStone(x, y, GomokuBoardValue::EMPTY);
+		return true;
 	}
-	else
-		bOverline = (nLine >= 6);
 
-	// 3 - diagonal direction (lower-left to upper-right: '/')
+	// 3 - diagonal direction ('\')
 	nLine = 1;
 	i = x-1;
 	j = y-1;
@@ -108,15 +105,13 @@ bool RenjuRuleManager::IsOverline(int x, int y,Turn turn)
 		else
 			break;
 	}
-	if (nLine == 5)
+	if (nLine >= 6)
 	{
 		SetStone(x, y, GomokuBoardValue::EMPTY);
-		return false;
+		return true;
 	}
-	else
-		bOverline = (nLine >= 6);
 
-	// 4 - diagonal direction (upper-left to lower-right: '\')
+	// 4 - diagonal direction ('/')
 	nLine = 1;
 	i = x - 1;
 	j = y + 1;
@@ -136,16 +131,14 @@ bool RenjuRuleManager::IsOverline(int x, int y,Turn turn)
 		else
 			break;
 	}
-	if (nLine == 5)
+	if (nLine >= 6)
 	{
 		SetStone(x, y, GomokuBoardValue::EMPTY);
-		return false;
+		return true;
 	}
-	else
-		bOverline = (nLine >= 6);
 
 	SetStone(x, y, GomokuBoardValue::EMPTY);
-	return bOverline;
+	return false;
 }
 bool RenjuRuleManager::IsFive(int x, int y, Turn turn, int dir)
 {
