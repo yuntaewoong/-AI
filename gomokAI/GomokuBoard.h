@@ -3,19 +3,10 @@
 #include "CustomRenderer.h"
 #include "IUpdateObject.h"
 #include "RenjuRuleManager.h"
-
-
+#include "ConstValue.h"
 class GomokuBoard : public IUpdateObject
 {
 private:
-	
-	const float BLACKBANNED_SIZE = 0.25;
-	const float MOUSEON_SIZE = 0.5;
-	const SDL_Color GRID_COLOR = { 0,0,0,0 };
-	const SDL_Color WHITESTONE_COLOR = { 255,255,255,0 };
-	const SDL_Color BLACKSTONE_COLOR = { 0,0,0,0 };
-	const SDL_Color BLACKBANNED_COLOR = { 255,0,0,0 };
-	const SDL_Color GOMOKUBOARD_COLOR = { 255	,192,	76,0 };
 	int boardWidth;
 	int boardHeight;
 	int boardWhiteSpace;
@@ -30,6 +21,7 @@ public:
 	GomokuBoard(CustomRenderer* renderer,int boardWidth,int boardHeight, int boardWhiteSpace);
 	GomokuBoard(GomokuBoard& board);
 	static const int BOARD_SIZE = 15;
+	static void GetDifference(GomokuBoard& board1, GomokuBoard& board2, int* x, int* y);//board1:원본판, board2:원본판에 한수 놓은 판,xy: 한수의 위치리턴
 	virtual void Update();
 	void ChangeTurn();
 	bool PutStone(int x,int y);

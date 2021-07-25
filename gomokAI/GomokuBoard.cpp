@@ -24,6 +24,21 @@ GomokuBoard::GomokuBoard(GomokuBoard& board)
 	}
 	this->renjuRuleManager = new RenjuRuleManager(this->board, BOARD_SIZE);
 }
+void GomokuBoard::GetDifference(GomokuBoard& board1, GomokuBoard& board2, int* x, int* y)//board1:원본판, board2:원본판에 한수 놓은 판,xy: 한수의 위치리턴
+{
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		for (int j = 0; j < BOARD_SIZE; j++)
+		{
+			if (board1.board[i][j].GetBoardValue() != board2.board[i][j].GetBoardValue())
+			{
+				*x = j;
+				*y = i;
+			}
+		}
+	}
+}
+
 void GomokuBoard::Update()
 {
 	this->DrawGrid();
@@ -47,9 +62,10 @@ bool GomokuBoard::PutStone(int x, int y)
 	if (renjuRuleManager->IsFive(x, y, turn))//종료조건만족
 		isEnd = true;
 	if (turn == Turn::BLACK_TURN)
-		board[y][x].SetBoardValue(GomokuBoardValue::BLACK);
+		board[y][x].SetBoardValue(GomokuBoardValue::BLACK);// board[y][x].SetBoardValue(GomokuBoardValue::BLACK);
 	else
-		board[y][x].SetBoardValue(GomokuBoardValue::WHITE);
+		board[y][x].SetBoardValue(GomokuBoardValue::WHITE);//board[y][x].SetBoardValue(GomokuBoardValue::WHITE);
+	
 	BlackBannedUpdate();//흑금수 갱신
 	ChangeTurn();//착수후 턴교체
 	return true;
@@ -125,6 +141,7 @@ GomokuBoard::~GomokuBoard()
 }
 void GomokuBoard::BlackBannedUpdate()
 {
+	
 	for (int i = 0; i < BOARD_SIZE; i++)
 		for (int j = 0; j < BOARD_SIZE; j++)
 			this->board[i][j].SetBlackBanned(renjuRuleManager->IsBlackBanned(j, i));
@@ -167,13 +184,13 @@ void GomokuBoard::DrawStone()
 			case GomokuBoardValue::EMPTY:
 				break;
 			case GomokuBoardValue::BLACK:
-				this->renderer->DrawColorChange(this->BLACKSTONE_COLOR);
+				this->renderer->DrawColorChange(BLACKSTONE_COLOR);
 				this->renderer->DrawFilledCircle(boardWhiteSpace + j * gridWidth, boardWhiteSpace + i * gridHeight, gridWidth / 2);
 				break;
 			case GomokuBoardValue::WHITE:
-				this->renderer->DrawColorChange(this->WHITESTONE_COLOR);
+				this->renderer->DrawColorChange(WHITESTONE_COLOR);
 				this->renderer->DrawFilledCircle(boardWhiteSpace + j * gridWidth, boardWhiteSpace + i * gridHeight, gridWidth / 2);
-				this->renderer->DrawColorChange(this->BLACKSTONE_COLOR);
+				this->renderer->DrawColorChange(BLACKSTONE_COLOR);
 				this->renderer->DrawEmptyCircle(boardWhiteSpace + j * gridWidth, boardWhiteSpace + i * gridHeight, gridWidth / 2);
 				break;
 			default:

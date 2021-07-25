@@ -4,6 +4,7 @@ PVPGameScene::PVPGameScene(CustomRenderer* customRenderer) : Scene(customRendere
 	gomokuBoard = new GomokuBoard(customRenderer, WINDOW_WIDTH, WINDOW_HEIGHT, WHITE_SPACE);
 	this->AddUpdateObject(gomokuBoard);
 }
+#include <iostream>
 void PVPGameScene::EventHandling(SDL_Event event)
 {
     switch (event.type)

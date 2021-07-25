@@ -36,13 +36,19 @@ void AIGameScene::UpdateScene()
 	if (this->gomokuBoard->IsEnd())
 		ReadyToNextScene();
 }
+#include <iostream>
 void AIGameScene::AIProcess()
 {
     GomokuAINode* gomokuAINode = new GomokuAINode(*this->gomokuBoard);
-    gomokuAINode->MakeTree(1);
-    //GomokuBoard* result = gomokuAINode->GetMiniMaxResult();//result: ai에 의한 수를 둔 gomokuBOard
+    gomokuAINode->MakeTree(0);
+    GomokuBoard* result = gomokuAINode->GetMiniMaxResult();//result: ai에 의한 수를 둔 gomokuBOard
+    std::cout << gomokuAINode->NumOfNode() << std::endl;
+    std::cout << gomokuAINode->SizeOfNode() << std::endl;
+    int x, y;
+    result->GetDifference(*this->gomokuBoard, *result, &x, &y);
+    std::cout << "x: " << x<< "y: " << y<< std::endl;
 
 
+    gomokuBoard->PutStone(x, y);
     delete gomokuAINode;
-    //delete result;
 }

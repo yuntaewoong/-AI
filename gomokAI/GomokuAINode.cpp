@@ -1,13 +1,20 @@
 #include "GomokuAINode.h"
-
 GomokuAINode::GomokuAINode(GomokuBoard& board, int value)
 {
-	this->board = new GomokuBoard(board);//µöÄ«ÇÇ
+	this->board = new GomokuBoard(board);
+	this->value = value;
+}
+GomokuAINode::GomokuAINode(GomokuBoard* board, int value)
+{
+	this->board = board;
 	this->value = value;
 }
 GomokuAINode::~GomokuAINode()
 {
 	delete this->board;
+	for each (GomokuAINode * node in nextNodes)
+		delete node;
+	nextNodes.clear();
 }
 void GomokuAINode::MakeTree(int depth)
 {
@@ -22,30 +29,76 @@ void GomokuAINode::MakeTree(int depth)
 	{
 		for (int j = 0; j < GomokuBoard::BOARD_SIZE; j++)
 		{
-			if(NewNode(j, i))
-				nextNodes[nextNodes.size() - 1]->MakeTree(depth - 1);
+			if (NewNode(j, i))
+			{
+				nextNodes.back()->MakeTree(depth - 1);
+			}
 		}
 	}
+}
+int GomokuAINode::NumOfNode()
+{
+	int result = 0;
+	result = NumOfNextNodes(nextNodes);
+	return result;
+}
+int GomokuAINode::NumOfNextNodes(list<GomokuAINode*> nextNodes)
+{
+	int result = 0;
+	if (nextNodes.empty())
+		return 1;
+	else
+	{
+		for (GomokuAINode* ptr : nextNodes)
+		{
+			result += NumOfNextNodes(ptr->nextNodes);
+		}
+	}
+	return result;
+}
+int GomokuAINode::SizeOfNode()
+{
+	int result = 0;
+	result = SizeOfNextNodes(nextNodes);
+	return result;
+}
+int GomokuAINode::SizeOfNextNodes(list<GomokuAINode*> nextNodes)
+{
+	int result = 0;
+	if (nextNodes.empty())
+		return _msize(this) + _msize(this->board);
+	else
+	{
+		for (GomokuAINode* ptr: nextNodes)
+		{
+			result += SizeOfNextNodes(ptr->nextNodes);
+		}
+	}
+	return result;
 }
 GomokuBoard* GomokuAINode::GetMiniMaxResult()
 {
 	this->SetMaxValue();
-	for (int i = 0; i < nextNodes.size(); i++)
+	for (GomokuAINode* ptr : nextNodes)
 	{
-		if (this->value == nextNodes[i]->value)
-			return nextNodes[i]->board;
+		if (this->value == ptr->value)
+			return ptr->board;
 	}
 }
 bool GomokuAINode::NewNode(int x, int y,int value)
 {
-	GomokuBoard* newBoard = new GomokuBoard(*board);
+
+	GomokuBoard* newBoard = new GomokuBoard(*board);//µöÄ«ÇÇ
 	if (newBoard->PutStone(x, y))
 	{
-		this->nextNodes.push_back(new GomokuAINode(*newBoard,value));
+		this->nextNodes.push_back(new GomokuAINode(newBoard,value));
 		return true;
 	}
 	else
+	{
+		delete newBoard;
 		return false;
+	}
 }
 int GomokuAINode::EvaluateNode(int x,int y)
 {
@@ -56,11 +109,11 @@ void GomokuAINode::SetMiniValue()
 	if (nextNodes.empty())
 		return;
 	int temp = 0;
-	for (int i = 0; i < nextNodes.size(); i++)
+	for (GomokuAINode* ptr : nextNodes)
 	{
-		nextNodes[i]->SetMaxValue();
-		if (nextNodes[i]->value <= temp)
-			temp = nextNodes[i]->value;
+		ptr->SetMaxValue();
+		if (ptr->value <= temp)
+			temp = ptr->value;
 	}
 	this->value = temp;
 }
@@ -69,11 +122,12 @@ void GomokuAINode::SetMaxValue()
 	if (nextNodes.empty())
 		return;
 	int temp = 0;
-	for (int i = 0; i < nextNodes.size(); i++)
+
+	for (GomokuAINode* ptr : nextNodes)
 	{
-		nextNodes[i]->SetMiniValue();
-		if (nextNodes[i]->value >= temp)
-			temp = nextNodes[i]->value;
+		ptr->SetMiniValue();
+		if (ptr->value >= temp)
+			temp = ptr->value;
 	}
 	this->value = temp;
 }
